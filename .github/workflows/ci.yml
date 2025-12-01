@@ -19,7 +19,7 @@ jobs:
       - name: 1.5. Criar Ficheiro .env de Ambiente
         run: |
           echo "API_KEY=ci_test_key_123
-          APP_SECRET_KEY=ci_secret_key_123" > .env   
+          APP_SECRET_KEY=ci_secret_key_123 > .env   
 
       - name: 2. Construir Imagens e Iniciar Servicos com Docker Compose
         run: docker compose up -d --build
