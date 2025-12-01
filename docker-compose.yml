@@ -1,0 +1,63 @@
+
+
+services:
+  # --- 1. Serviço de Utilizadores (USERS) ---
+  users:
+    # O contexto é a raiz do projeto (onde está users.py e o Dockerfile)
+    build:
+      context: .
+      # Assumimos que o Dockerfile para o users service se chama Dockerfile.users
+      dockerfile: Dockerfile.users
+    
+    container_name: user-service-container
+    
+    # Mapeia a porta 5001 do container para a porta 5001 do seu host
+    # O users.py corre internamente na 5001
+    ports:
+      - "5001:5001"
+      
+    # Variáveis de ambiente: Carrega API_KEY_GEMINI e outras variáveis do seu .env
+    env_file:
+      - .env
+      
+    # Garante que o container tenta reiniciar em caso de falha
+    restart: always
+    
+    # Conecta o contentor à rede interna
+    networks:
+      - microservice-network
+
+  # --- 2. Serviço de Produtos (PRODUCTS) ---
+  products:
+    build:
+      context: .
+      # Assumimos que o Dockerfile para o products service se chama Dockerfile.products
+      dockerfile: Dockerfile.products
+      
+    container_name: product-service-container
+    
+    # Mapeia a porta 5000 do container para a porta 5000 do seu host
+    # O products.py corre internamente na 5000
+    ports:
+      - "5000:5000"
+      
+    env_file:
+      - .env
+      
+    # Dependência: Garante que o users service é iniciado antes de products
+    depends_on:
+      - users
+      
+    # O hostname 'users' usado dentro do products.py (http://users:5001)
+    # será resolvido pelo Docker para o contentor 'users'.
+    networks:
+      - microservice-network
+      
+    restart: always
+
+# --- 3. Redes (NETWORK) ---
+networks:
+  microservice-network:
+    # Cria uma rede bridge para permitir a comunicação interna entre os serviços
+    driver: bridge
+    
