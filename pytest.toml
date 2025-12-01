@@ -1,0 +1,13 @@
+[pytest]
+
+addopts = ["--strict-markers"]
+
+markers = [
+"unit: Tests that isolate and verify small components of code.",
+"dev: Core tests that run during the 'dev' stage of the pipeline.",
+"integration: Tests that verify two or more components/services interact correctly.",
+"staging: Tests that run in the staging pipeline.",
+"e2e: End-to-End tests that verify the entire application flow.",
+"sanity: Quick, high-level tests to ensure the application is functional.",
+"prod: Smoke tests that run against the production environment.",
+]

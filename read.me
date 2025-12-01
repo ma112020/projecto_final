@@ -1,0 +1,34 @@
+read.me
+
+📦 Projeto Final - Microserviços (Docker). Este projeto é um exemplo de como dividir uma aplicação em duas partes (Serviços) que trabalham juntas, usando o Docker e Docker Compose para conteinerização e orquestração e criando um pipeline de entrega contínua (CI) com o GitHub Actions.
+
+As duas partes (microserviços) são:
+
+User Service (Porta 5001): Cuida de toda a informação dos Utilizadores.
+
+Product Service (Porta 5000): Cuida dos Produtos e precisa de "perguntar" ao User Service quem é o dono do produto.
+
+🏃 Para testar o projecto:
+Deverá ter o Docker e Docker Compose instalados na sua máquina
+
+1. Copiar o código:
+git clone [https://github.com/ma112020/projecto_final.git](https://github.com/ma112020/projecto_final.git)
+cd projecto_final
+
+2. Preparar o Ficheiro de ambiente (.env): O Docker precisa de um ficheiro chamado .env para funcionar. Exemplo:
+
+echo "API_KEY=CHAVE_FAKE_OU_REAL" >>.env
+echo "APP_SECRET_KEY=QUALQUER_SEGREDO" >> .env
+
+3. Iniciar os serviços:
+docker compose up -d --build
+
+4. Testar a aaplicação: 
+Serviço de Produtos: Veja se está a funcionar em http://localhost:5000
+Teste de Integração: Este teste mostra os produtos e o seu dono (puxado do outro serviço): http://localhost:5000/product/101
+
+🚦 Integração Contínua (CI): Foi configurado o pipeline no GitHub Actions para testar automaticamente o código sempre que faz uma alteração.
+O sistema de testes é ativado automaticamente nestes 3 branches para garantir que o código está sempre a funcionar:
+develop: Onde se trabalha.
+staging: Onde se preparam os testes finais
+master: O código final (Produção).

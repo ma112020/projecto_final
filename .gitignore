@@ -1,0 +1,93 @@
+.------------------------------------------------------------------------
+
+Python bytecode
+
+*.pyc
+pycache/
+*.$py.class
+
+Distribution / Packaging
+
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+Virtual Environment
+
+Ignora pastas comuns de ambientes virtuais
+
+venv/
+.venv/
+env/
+.env/
+
+MyPy (Static type checker)
+
+.mypy_cache/
+
+pytest (Test runner)
+
+.pytest_cache/
+htmlcov/
+.nox/
+
+-------------------------------------------------------------------------
+
+Secrets and Environment Variables (MANDATORY SECURITY)
+
+-------------------------------------------------------------------------
+
+Arquivos de variáveis de ambiente que contêm API keys, DB passwords, etc.
+
+ESTE É CRUCIAL PARA A SUA API_KEY_GEMINI e outras credenciais.
+
+.env
+.env.*
+.env_local
+
+Chaves de segurança/API
+
+*.key
+*.pem
+*.pfx
+
+-------------------------------------------------------------------------
+
+IDE and Editor Files
+
+-------------------------------------------------------------------------
+
+VS Code
+
+.vscode/
+
+JetBrains IDEs (PyCharm, IntelliJ)
+
+.idea/
+
+-------------------------------------------------------------------------
+
+Docker Artifacts
+
+-------------------------------------------------------------------------
+
+Ignorar o contexto de construção (se for gerado)
+
+docker-compose.override.yml
+docker-compose.local.yml
+
+Ignorar qualquer volume que possa ser gerado localmente pelo Docker
+
+volumes/
+data/
+
+-------------------------------------------------------------------------
+
+macOS / Linux System Files
+
+-------------------------------------------------------------------------
+
+.DS_Store
+*~
