@@ -1,0 +1,60 @@
+name: Integracao Continua (CI)
+
+on:
+  push:
+    branches:
+      - develop
+      - staging
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. Checkout do Codigo
+        uses: actions/checkout@v4
+
+# Cria um ficheiro .env simples com valores de ambiente ficticios para satisfazer o docker-compose.yml
+      - name: 1.5. Criar Ficheiro .env de Ambiente
+        run: |
+          echo "API_KEY=ci_test_key_123
+          APP_SECRET_KEY=ci_secret_key_123" > .env   
+
+      - name: 2. Construir Imagens e Iniciar Servicos com Docker Compose
+        run: docker compose up -d --build
+
+      - name: 3. Esperar que os Servicos Estejam Prontos
+        run: sleep 10
+
+      - name: 4. Testar a Conectividade (User Service)
+        run: |
+          echo "A testar o User Service..."
+          for i in {1..5}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/)
+            if [ "$STATUS" -eq 200 ]; then
+              echo "User Service OK (Status 200)."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Erro: User Service nao respondeu com codigo 200."
+          exit 1
+
+      - name: 5. Testar a Integracao (Product Service)
+        run: |
+          echo "A testar a Integracao de Produtos/Utilizadores (ID 101)..."
+          RESPONSE=$(curl -s http://localhost:5000/product/101)
+          if echo "$RESPONSE" | grep -q "owner_details"; then
+            echo "Integracao Product/User OK."
+          else
+            echo "Erro: Falha na integracao. Resposta:"
+            echo "$RESPONSE"
+            docker compose logs
+            exit 1
+          fi
+
+      - name: 6. Limpeza do Ambiente
+        if: always()
+        run: docker compose down
+
